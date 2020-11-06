@@ -25,7 +25,10 @@ function MemberList({ history, match }) {
     };
 
     switch (loading) {
-        case false:
+        case true:
+            return <Loading />;
+
+        default:
             return (
                 <div className="member-list">
                     <div className="member-list__title">파트원 소개</div>
@@ -46,8 +49,6 @@ function MemberList({ history, match }) {
                     </div>
                 </div>
             );
-        default:
-            return <Loading />;
     }
 }
 
