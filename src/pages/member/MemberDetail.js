@@ -20,7 +20,9 @@ function MemberDetail({ match }) {
             try {
                 setMemberState({ status: 'pending', member: null });
                 const result = await getMemberAPI(match.params.id);
+                console.log(result);
                 setTimeout(() => setMemberState({ status: 'resolved', member: result }), 600);
+                
             } catch (e) {
                 setMemberState({ status: 'rejected', member: null });
             }
