@@ -11,7 +11,7 @@ const getMembers = async () => {
         return data.data;
     } catch (e) {
         console.error('[FAIL] GET MEMBERS', e);
-        return e;
+        throw e;
     }
 }
 
@@ -22,7 +22,7 @@ const getMember = async (id) => {
         return data.data;
     } catch (e) {
         console.error('[FAIL] GET MEMBER', e);
-        return e;
+        throw e;
     }
 };
 
@@ -33,7 +33,7 @@ const updateMember = async (id, member) => {
         return data.data;
     } catch (e) {
         console.error('[FAIL] UPDATE MEMBER', e);
-        return e;
+        throw e;
     }
 }
 
@@ -44,7 +44,18 @@ const createMember = async (member) => {
         return data.data;
     } catch (e) {
         console.log('[FAIL] CREATE MEMBER', e);
-        return e
+        throw e;
+    }
+}
+
+const deleteMember = async (id) => {
+    try {
+        const { data } = await axios.delete(`${url}/${id}`);
+        console.log('[SUCCESS] DELETE MEMBER', data);
+        return data.data;
+    } catch (e) {
+        console.log('[FAIL] DELETE MEMBER');
+        throw (e);
     }
 }
 
@@ -53,8 +64,9 @@ const memberAPI = {
     getMember,
     updateMember,
     createMember,
+    deleteMember,
 }
 
 export default memberAPI;
-export { getMember, getMembers, updateMember, createMember };
+export { getMember, getMembers, updateMember, createMember, deleteMember };
 

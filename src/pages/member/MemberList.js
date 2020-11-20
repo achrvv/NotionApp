@@ -63,7 +63,11 @@ function MemberList({ history, match }) {
                     <hr />
                     <div className="member-list-content-wrapper">
                         {membersState.members.map((member, i) =>
-                            <Card key={"card-" + i} memberData={member} />)}
+                            <Card key={"card-" + i} memberData={member}
+                                onDeleteCard={ () => setMembersState({
+                                    status: 'resolved',
+                                    members: membersState.members.filter(mem => mem.id !== member.id)
+                                })}/>)}
                         <div className="create-card" onClick={ onClickCreateCard }>+ New</div>
                     </div>
                 </div>

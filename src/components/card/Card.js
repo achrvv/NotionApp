@@ -1,11 +1,21 @@
 import './Card.scss';
 import { DeleteOutlined, FileImageOutlined } from '@ant-design/icons';
 import { withRouter } from 'react-router-dom';
+import { deleteMember } from '../../lib/api/memberAPI';
 
-function Card({ memberData, history }) {
+function Card({ memberData, history, onDeleteCard }) {
+    const onClickRemove = async (evt) => {
+        evt.stopPropagation();
+        try {
+            await deleteMember(memberData.id);
+            onDeleteCard();
+        } catch (e) {
+            // fail
+        }
+    }
     return (
         <div className="card" draggable onClick={ () => history.push(`/members/${memberData.id}`) }>
-            <div className="remove-button">
+            <div className="remove-button" onClick={ onClickRemove }>
                 <DeleteOutlined style={{ fontSize: "16px"}}/>
             </div>
             <div className="image-area">
