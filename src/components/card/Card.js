@@ -1,9 +1,10 @@
 import './Card.scss';
 import { DeleteOutlined, FileImageOutlined } from '@ant-design/icons';
+import { withRouter } from 'react-router-dom';
 
-function Card({ memberData }) {
+function Card({ memberData, history }) {
     return (
-        <div className="card" draggable >
+        <div className="card" draggable onClick={ () => history.push(`/members/${memberData.id}`) }>
             <div className="remove-button">
                 <DeleteOutlined style={{ fontSize: "16px"}}/>
             </div>
@@ -18,4 +19,4 @@ function Card({ memberData }) {
     );
 }
 
-export default Card;
+export default withRouter(Card);

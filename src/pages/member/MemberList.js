@@ -4,7 +4,7 @@ import Card from '../../components/card/Card';
 import { useEffect, useState } from 'react';
 import Loading from '../../components/loading/Loading';
 
-import { getMembersAPI } from '../../lib/api/memberAPI';
+import { getMembers } from '../../lib/api/memberAPI';
 
 function MemberList({ history, match }) {
     const [ membersState, setMembersState ] = useState({
@@ -16,7 +16,7 @@ function MemberList({ history, match }) {
         (async () => {
             setMembersState({ members: null, status: 'pending' });
             try {
-                const result = await getMembersAPI();
+                const result = await getMembers();
                 setTimeout(() => setMembersState({ members: result, status: 'resolved' }), 800);
             } catch (e) {
                 setMembersState({ members: null, status: 'rejected' });
