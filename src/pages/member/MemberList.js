@@ -4,7 +4,7 @@ import Card from '../../components/card/Card';
 import { useEffect, useState } from 'react';
 import Loading from '../../components/loading/Loading';
 
-import { getMembers } from '../../lib/api/memberAPI';
+import { getMembers, createMember } from '../../lib/api/memberAPI';
 
 function MemberList({ history, match }) {
     const [ membersState, setMembersState ] = useState({
@@ -23,6 +23,24 @@ function MemberList({ history, match }) {
             }
         })();
     }, []);
+
+    const onClickCreateCard = async () => {
+        try {
+            const data = await createMember({
+                name: '',
+                profileUrl: '',
+                instagram: '',
+                introduction: '',
+                mbti: '',
+            });
+            setMembersState({
+                status: 'resolved',
+                members: [...membersState.members, data]
+            });
+        } catch (e) {
+            // fail
+        }
+    }
 
     switch (membersState.status) {
         case 'pending':
@@ -46,7 +64,7 @@ function MemberList({ history, match }) {
                     <div className="member-list-content-wrapper">
                         {membersState.members.map((member, i) =>
                             <Card key={"card-" + i} memberData={member} />)}
-                        <div className="create-card">+ New</div>
+                        <div className="create-card" onClick={ onClickCreateCard }>+ New</div>
                     </div>
                 </div>
             );
