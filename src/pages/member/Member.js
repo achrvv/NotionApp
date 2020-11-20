@@ -3,7 +3,6 @@ import MemberList from './MemberList';
 import MemberDetail from './MemberDetail';
 
 function Member({ match }) {
-    // console.log(match);
     return (
         <section style={{margin: "0 90px"}}>
             <Switch>

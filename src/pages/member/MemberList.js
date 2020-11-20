@@ -6,29 +6,30 @@ import Loading from '../../components/loading/Loading';
 
 import { getMembersAPI } from '../../lib/api/memberAPI';
 
-
 function MemberList({ history, match }) {
-    const [members, setMembers] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [ membersState, setMembersState ] = useState({
+        members: null,
+        status: 'idle',
+    });
 
     useEffect(() => {
         (async () => {
-            const result = await getMembersAPI();
-            setMembers(result);
-            setTimeout(() => setLoading(false), 800); // 테스트용으로 setTimeout을 실행!
+            setMembersState({ members: null, status: 'pending' });
+            try {
+                const result = await getMembersAPI();
+                setTimeout(() => setMembersState({ members: result, status: 'resolved' }), 800);
+            } catch (e) {
+                setMembersState({ members: null, status: 'rejected' });
+            }
         })();
     }, []);
 
-    const removeCard = (evt) => {
-        evt.stopPropagation();
-        console.log('REMOVE CARD!!');
-    };
-
-    switch (loading) {
-        case true:
+    switch (membersState.status) {
+        case 'pending':
             return <Loading />;
-
-        default:
+        case 'rejected':
+            return <div>데이터 로딩 실패</div>;
+        case 'resolved':
             return (
                 <div className="member-list">
                     <div className="member-list__title">파트원 소개</div>
@@ -43,12 +44,15 @@ function MemberList({ history, match }) {
                     </div>
                     <hr />
                     <div className="member-list-content-wrapper">
-                        {members.map((member, i) =>
-                            <Card key={"card-" + i} route={{ history, match }}
-                                memberData={member} onRemoveCard={removeCard} />)}
+                        {membersState.members.map((member, i) =>
+                            <Card key={"card-" + i} memberData={member} />)}
+                        <div className="create-card">+ New</div>
                     </div>
                 </div>
             );
+        case 'idle':
+        default:
+            return <div></div>
     }
 }
 

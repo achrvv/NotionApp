@@ -1,66 +1,47 @@
 import './MemberDetail.scss';
 
-import { useEffect, useState } from 'react';
-import { getMemberAPI } from '../../lib/api/memberAPI';
+import { useState } from 'react';
 
 import Button from '../../components/button/Button';
 import Loading from '../../components/loading/Loading';
 
-import { Input } from 'antd';
 import { InstagramOutlined, AlignLeftOutlined, RadarChartOutlined } from '@ant-design/icons';
 
 function MemberDetail({ match }) {
-    const [ memberState, setMemberState ] = useState({
-        status: 'idle',
-        member: null
+    const [memberState, setMemberState] = useState({
+        // 테스트를 위해 임시로 초기값 설정!
+        status: 'resolved',
+        member: {
+            name: 'name',
+            instagram: 'instagram',
+            introduction: 'intro',
+            mbti: 'mbti',
+            profileUrl: 'https://sopt26.s3.ap-northeast-2.amazonaws.com/images/origin/1603800059249.jpg',
+        }
     });
-    
-    useEffect(() => {
-        (async () => {
-            try {
-                setMemberState({ status: 'pending', member: null });
-                const result = await getMemberAPI(match.params.id);
-                console.log(result);
-                setTimeout(() => setMemberState({ status: 'resolved', member: result }), 600);
-                
-            } catch (e) {
-                setMemberState({ status: 'rejected', member: null });
-            }
-        })();
-    }, []);
 
-    const onChangeInputs = (evt) => {
-        const { name, value } = evt.target;
-        setMemberState({
-            status: 'resolved',
-            member: {
-                ...memberState.member,
-                [name]: value
-            }
-        });
-        // TODO
-        // 서버에 update 로직이 필요!
-    };
-    
     const memberElement = () => (
         <div className="member-detail">
             <div className="member-detail__button-area">
                 <Button text="Add icon"></Button>
                 <Button text="Add cover"></Button>
             </div>
-            <div className="member-detail__content name"> {memberState.member.name} </div>
+            <input className="member-detail__content name" value={memberState.member.name} onChange={(evt) => console.log('name Change', evt) }/>
             <hr style={{borderTop: "solid 1px #eee", marginBottom: "24px"}}/>
             <div className="member-detail__content">
                 <div className="content-title"><InstagramOutlined />&nbsp; 인스타 아이디</div>
-                <Input className="content-input" bordered={false} name="instagram" value={memberState.member.instagram} onChange={onChangeInputs}/>
+                <input className="content-input" name="instagram" value='INSTAGRAM' onChange={ (evt) => console.log('instagram Change', evt)}/>
             </div>
             <div className="member-detail__content">
                 <div className="content-title"><AlignLeftOutlined />&nbsp; 한 줄 소개</div>
-                <Input className="content-input" bordered={false} name="introduction" value={memberState.member.introduction} onChange={onChangeInputs}/>
+                <input className="content-input" name="introduction" value='INTRO' onChange={ (evt) => console.log('intro Change', evt)}/>
             </div>
             <div className="member-detail__content">
                 <div className="content-title"><RadarChartOutlined />&nbsp; mbti</div>
-                <Input className="content-input" bordered={false} name="mbti" value={memberState.member.mbti} onChange={onChangeInputs}/>
+                <input className="content-input" value='MBTI' onChange={ (evt) => console.log('mbti Change', evt)}/>
+            </div>
+            <div className="member-detail__content">
+                { memberState.member.profileUrl !== '' ? <img className="content-image" src={memberState.member.profileUrl} alt={'profile url'} /> : '' }
             </div>
         </div>
     );
