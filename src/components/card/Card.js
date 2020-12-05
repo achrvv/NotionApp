@@ -10,7 +10,7 @@ function Card({ memberData, history, onDeleteCard }) {
             await deleteMember(memberData.id);
             onDeleteCard();
         } catch (e) {
-            // fail
+            
         }
     }
     return (
